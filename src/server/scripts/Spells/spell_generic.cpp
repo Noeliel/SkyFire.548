@@ -3619,6 +3619,128 @@ class spell_gen_whisper_gulch_yogg_saron_whisper : public SpellScriptLoader
         }
 };
 
+
+//forgive me, i am a noob :P
+enum LegendaryCloakProcSpell
+{
+    SPELL_LEGICLOAK_PROC_CASTER = 148954,
+    SPELL_LEGICLOAK_PROC_HEAL   = 148956,
+    SPELL_LEGICLOAK_PROC_DD     = 148957,
+    SPELL_LEGICLOAK_PROC_TANK   = 148958
+};
+
+class spell_legi_cloak_effect_caster : public SpellScriptLoader
+{
+public:
+    spell_legi_cloak_effect_caster() : SpellScriptLoader("spell_legi_cloak_effect_caster") { }
+
+    class spell_legi_cloak_effect_caster_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_legi_cloak_effect_caster_AuraScript);
+
+        void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
+        {
+            //GetCaster()->CastSpell((Unit*)NULL, SPELL_LEGICLOAK_PROC_TANK, true);
+            if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(SPELL_LEGICLOAK_PROC_CASTER))
+                Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, GetCaster(), GetCaster());
+        }
+
+        void Register() OVERRIDE
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_legi_cloak_effect_caster_AuraScript::HandleEffectPeriodic, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_legi_cloak_effect_caster_AuraScript();
+    }
+};
+
+class spell_legi_cloak_effect_heal : public SpellScriptLoader
+{
+    public:
+        spell_legi_cloak_effect_heal() : SpellScriptLoader("spell_legi_cloak_effect_heal") { }
+
+        class spell_legi_cloak_effect_heal_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_legi_cloak_effect_heal_AuraScript);
+
+            void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
+            {
+                //GetCaster()->CastSpell((Unit*)NULL, SPELL_LEGICLOAK_PROC_TANK, true);
+                if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(SPELL_LEGICLOAK_PROC_HEAL))
+                    Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, GetCaster(), GetCaster());
+            }
+
+            void Register() OVERRIDE
+            {
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_legi_cloak_effect_heal_AuraScript::HandleEffectPeriodic, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const OVERRIDE
+        {
+            return new spell_legi_cloak_effect_heal_AuraScript();
+        }
+};
+
+class spell_legi_cloak_effect_dd : public SpellScriptLoader
+{
+public:
+    spell_legi_cloak_effect_dd() : SpellScriptLoader("spell_legi_cloak_effect_dd") { }
+
+    class spell_legi_cloak_effect_dd_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_legi_cloak_effect_dd_AuraScript);
+
+        void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
+        {
+            //GetCaster()->CastSpell((Unit*)NULL, SPELL_LEGICLOAK_PROC_TANK, true);
+            if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(SPELL_LEGICLOAK_PROC_DD))
+                Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, GetCaster(), GetCaster());
+        }
+
+        void Register() OVERRIDE
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_legi_cloak_effect_dd_AuraScript::HandleEffectPeriodic, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_legi_cloak_effect_dd_AuraScript();
+    }
+};
+
+class spell_legi_cloak_effect_tank : public SpellScriptLoader
+{
+public:
+    spell_legi_cloak_effect_tank() : SpellScriptLoader("spell_legi_cloak_effect_tank") { }
+
+    class spell_legi_cloak_effect_tank_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_legi_cloak_effect_tank_AuraScript);
+
+        void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
+        {
+            //GetCaster()->CastSpell((Unit*)NULL, SPELL_LEGICLOAK_PROC_TANK, true);
+            if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(SPELL_LEGICLOAK_PROC_TANK))
+                Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, GetCaster(), GetCaster());
+        }
+
+        void Register() OVERRIDE
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_legi_cloak_effect_tank_AuraScript::HandleEffectPeriodic, EFFECT_1, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_legi_cloak_effect_tank_AuraScript();
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -3702,4 +3824,10 @@ void AddSC_generic_spell_scripts()
     new spell_gen_vendor_bark_trigger();
     new spell_gen_wg_water();
     new spell_gen_whisper_gulch_yogg_saron_whisper();
+
+    // Legendary Cloak Visual Effects
+    new spell_legi_cloak_effect_caster();
+    new spell_legi_cloak_effect_heal();
+    new spell_legi_cloak_effect_dd();
+    new spell_legi_cloak_effect_tank();
 }
